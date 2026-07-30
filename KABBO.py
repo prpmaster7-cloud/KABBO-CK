@@ -50,7 +50,7 @@ def kabbo_approval():
     
     # Yahan apni GitHub link lagayein jahan approved keys hongi
     # Format: Raw text file on GitHub
-    github_link = "https://raw.githubusercontent.com/prpmaster7-cloud/KABBO-CK/main/approval.txt"
+    github_link = "https://raw.githubusercontent.com/prpmaster7-cloud/KABBO-CK/master/approval.txt"
     
     print(r'''
 \033[1;31m ██╗  ██╗ █████╗ ██████╗ ██████╗  ██████╗ 
